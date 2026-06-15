@@ -1,6 +1,162 @@
 import React, { useState, useEffect } from "react";
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ─── HARDCODED INITIAL STUDENTS DATA (150 STUDENTS) ─────────────────────────
+const INITIAL_STUDENTS = [
+  { id: "23FE1A05L6", name: "SHAIK NAJIYA SANOBER", email: "shaiknajiyasanober158@gmail.com" },
+  { id: "23FE1A05C3", name: "MARADANI KEERTHI VYSHNAVI", email: "keerthi010506@gmail.com" },
+  { id: "24FE5A0515", name: "NIDAMANURI VAMSI", email: "vamsia585@gmail.com" },
+  { id: "23FE1A6107", name: "BHAVANAM RAHUL", email: "bhavanamrahul16@gmail.com" },
+  { id: "23FE1A05J6", name: "RAVULAPALLI AJAY KUMAR", email: "ajayravulapalli.555@gmail.com" },
+  { id: "23FE1A1241", name: "POREDDY NAGA VARSHITHA", email: "varshithakrishnareddy2016@gmail.com" },
+  { id: "23FE1A6142", name: "POLIMERA JAYA SAI JASWANTH", email: "jayasaijaswanthp@gmail.com" },
+  { id: "23FE1A1222", name: "KANCHETI CHETHANA LAKSHMI", email: "chethanalakshmi13@gmail.com" },
+  { id: "23FE1A4417", name: "GUNTAKA PRANAV NADH REDDY", email: "pranavnadh6@gmail.com" },
+  { id: "23FE1A4427", name: "KOLIKI JHANSI", email: "kolikijhansi181@gmail.com" },
+  { id: "23FE1A4444", name: "RAPURU VARSHINI", email: "rapurvarshini2964@gmail.com" },
+  { id: "23FE1A05L0", name: "SHAIK BALA KHASIM BEE", email: "khasimbee2606@gmail.com" },
+  { id: "23FE1A05L7", name: "SHAIK NAZIYA", email: "naziyashaik05l7@gmail.com" },
+  { id: "23FE1A4423", name: "KANKIPATI VENKATA KRISHNA SATWIK", email: "satwik.kankipati@gmail.com" },
+  { id: "23FE1A05J2", name: "RAMARAJU NAGA ESWARA SRAVAN", email: "sravantatikonda123@gmail.com" },
+  { id: "23FE1A1242", name: "POSINA VARNITHA", email: "varnithaposina@gmail.com" },
+  { id: "23FE1A4450", name: "SHAIK SAAJITH", email: "saajithmkks36@gmail.com" },
+  { id: "23FE1A1210", name: "DANABOINA HARI KRISHNA YADAV", email: "krishnahariyadav440@gmail.com" },
+  { id: "23FE1A4419", name: "JILLELAMUDI NAGA SRI VIDHYA", email: "vidhyajillelamudi346@gmail.com" },
+  { id: "23FE1A4422", name: "KANDIMALLA JYOTHI LAKSHMI", email: "jyothikandimalla6@gmail.com" },
+  { id: "23FE1A4435", name: "NALLA SAI CHARAN", email: "charannalla07@gmail.com" },
+  { id: "23FE1A05D0", name: "MODALAVALASA RAVI KIRAN", email: "ravikiranmodalavalasa@gmail.com" },
+  { id: "23FE1A05D6", name: "MOLLETI SRAVANI", email: "molletisravani27@gmail.com" },
+  { id: "24FE5A6102", name: "DIVI SUKUMAR", email: "divisukumar005@gmail.com" },
+  { id: "23FE1A4434", name: "MEDURI PREM SAI", email: "mpremsai147@gmail.com" },
+  { id: "23FE1A0520", name: "BITRA NAVADEEP", email: "inavadeep1205@gmail.com" },
+  { id: "23FE1A0486", name: "MALLEBOYINA HARSHA VARDHAN", email: "malleboyinasunny29@gmail.com" },
+  { id: "23FE1A4258", name: "TALASILA DIVYA HARI PRAKASH", email: "hariprakashtalasila5@gmail.com" },
+  { id: "23FE1A0545", name: "DASINENI HEMANTH", email: "hemanthdasineni6@gmail.com" },
+  { id: "24FE5A6104", name: "MUTTE SAI RAJESH", email: "muttesairajesh@gmail.com" },
+  { id: "23FE1A4462", name: "YALLAMATI SANNIDHI", email: "sannidhiyallamati462@gmail.com" },
+  { id: "23FE1A05P1", name: "SHAIK SABIHA SULTANA", email: "shaiksabihasultana55@gmail.com" },
+  { id: "23FE1A6157", name: "TATA LAKSHMI VENKATA GAYATHRI", email: "tatagayathri39@gmail.com" },
+  { id: "24FE5A0524", name: "VAVILAPALLI TARUN KUMAR", email: "vavilapallitarun32@gmail.com" },
+  { id: "23FE1A0489", name: "MANDULA MOUNIKA", email: "mounikamandula2005@gmail.com" },
+  { id: "23FE1A4402", name: "AMISIGADDA KOHITHA", email: "amisigaddakohitha@gmail.com" },
+  { id: "23FE1A4433", name: "MATURU LOKESH", email: "maturulokesh18@gmail.com" },
+  { id: "23FE1A0518", name: "BHUPATHI NAGA LIKITH", email: "bnagalikith12@gmail.com" },
+  { id: "23FE1A0561", name: "GANDIKOTA SACHIN", email: "gandikotasachin@gmail.com" },
+  { id: "23FE1A05B0", name: "MADDINA SRAVANTHI", email: "sravanthimaddina42@gmail.com" },
+  { id: "24FE5A4205", name: "SHAIK SAMEER", email: "shaiksameer3638@gmail.com" },
+  { id: "23FE1A0519", name: "BIKKI SRINIVAS", email: "bikkisrinivas19@gmail.com" },
+  { id: "23FE1A4412", name: "DANDEMPALLI SHRUTHI", email: "shruthidandempalli@gmail.com" },
+  { id: "23FE1A4214", name: "DAGGUBATI DEEPTHI SAI", email: "deepthisaidaggubati@gmail.com" },
+  { id: "23FE1A6109", name: "BODDU NARENDRA", email: "boddunarendra196@gmail.com" },
+  { id: "23FE1A05O1", name: "YALLA VYSHNAVI", email: "yallavyshnavi@gmail.com" },
+  { id: "23FE1A4401", name: "AKKALA SAI NARAYANA", email: "saiakkala2006@gmail.com" },
+  { id: "23FE1A0536", name: "CHINTA MANASA", email: "chintamanasa294@gmail.com" },
+  { id: "23FE1A0558", name: "GAJULAVARTHI KALYAN RAO", email: "kalyanrao135@gmail.com" },
+  { id: "23FE1A05C4", name: "MATTUPALLI DEVI SRAVANI", email: "devisravanimattupalli@gmail.com" },
+  { id: "24FE5A0516", name: "PADAMATI DALL SAI KEERTHI", email: "keerthipadamati50@gmail.com" },
+  { id: "23FE1A6122", name: "JAKKA VASANTHIKA", email: "jvasanthika@gmail.com" },
+  { id: "24FE5A4201", name: "ATLURI VENKATA SIVA REDDY", email: "venkatshiva823@gmail.com" },
+  { id: "23FE1A05A9", name: "MACHARLA SOWMYA", email: "sowmyamacharla21@gmail.com" },
+  { id: "23FE1A6118", name: "ENAGANTI FIROZ BABU", email: "babufiroz879@gmail.com" },
+  { id: "23FE1A4403", name: "ANIMELLA KARTHIKEYA GIRINDRA", email: "animellakarthikeyagirindra@gmail.com" },
+  { id: "23FE1A4430", name: "KURAPATI BHARGAVI", email: "kurapati608@gmail.com" },
+  { id: "23FE1A4235", name: "MADDELA SIR JAMES YUVARAJU", email: "jamesyuvaraj27@gmail.com" },
+  { id: "23FE1A0480", name: "KROVI LAXMI NAGA SRAVANI", email: "klnsravani06@gmail.com" },
+  { id: "23FE1A6162", name: "YARLAGADDA NAGA SRUTHI", email: "sruthiyarlagadda988@gmail.com" },
+  { id: "23FE1A1235", name: "NOORBASHA BAJI", email: "bajinoorbasha961@gmail.com" },
+  { id: "23FE1A4221", name: "GARNEPUDI TEJASWI", email: "tejaswigarnepudi85@gmail.com" },
+  { id: "23FE1A0503", name: "AKURATHI LEELAVENKATESH", email: "leelavenkateshakurathi@gmail.com" },
+  { id: "23FE1A0538", name: "CHIRAKAALA VENKATA SAI MANIKANTA", email: "saimani0710@gmail.com" },
+  { id: "23FE1A0496", name: "MOHAMMAD SANIYA", email: "mohammadsaira123@gmail.com" },
+  { id: "23FE1A04A2", name: "NAGUMOTHU PRAGATHI", email: "pragathinagumothu5@gmail.com" },
+  { id: "23FE1A6124", name: "KARA DIVYA SREELEKHA", email: "divyasreelekha777@gmail.com" },
+  { id: "23FE1A05O4", name: "YARRA VIVEK", email: "vivekyarra567@gmail.com" },
+  { id: "23FE1A1252", name: "SHAIK TABASSUM", email: "vignanlara1252@gmail.com" },
+  { id: "23FE1A0460", name: "JAMPANI VAISHNAVI", email: "jampanivaishnavii@gmail.com" },
+  { id: "23FE1A6150", name: "SHAIK AHMAD ALI", email: "shailkahamadali3773@gmail.com" },
+  { id: "23FE1A6154", name: "SHAIK SAJIDA", email: "haiksajida7234@gmail.com" },
+  { id: "23FE1A4406", name: "BANAVATH DEEPIKA BAI", email: "deepikabanavath.06@gmail.com" },
+  { id: "23FE1A4440", name: "PENUGONDA DHARSHAN BABU", email: "dharshanpenugonda8374@gmail.com" },
+  { id: "23FE1A0585", name: "KALLURI ROHITHA", email: "rohithakalluri79@gmail.com" },
+  { id: "23FE1A05G6", name: "PALETI VENKATA MURALI KRISHNA", email: "pvmuralikrishna481141@gmail.com" },
+  { id: "23FE1A1208", name: "BORA ARCHANA", email: "archanabora607@gmail.com" },
+  { id: "24FE5A1202", name: "GUNTUR HARIKA", email: "harikaguntur22@gmail.com" },
+  { id: "23FE1A6152", name: "SHAIK MUBEENA", email: "shaikmubeena.aiml@gmail.com" },
+  { id: "23FE1A05I8", name: "PULAVARTHI VENKAT PRAKASH", email: "pvenky2005@gmail.com" },
+  { id: "23FE1A05N3", name: "VALETI NARASIMHA NAIDU", email: "narasimha9383@gmail.com" },
+  { id: "24FE5A1205", name: "NAGIREDDI ABHINAY", email: "abhinay891984@gmail.com" },
+  { id: "23FE1A4254", name: "SHAIK TAMEEZ", email: "tameezshaik516@gmail.com" },
+  { id: "23FE1A05A6", name: "KOTULA KUMAR MANIKANTA", email: "manikantakumar429@gmail.com" },
+  { id: "23FE1A05K5", name: "SAYAMPU ANUSHA", email: "sayampuanusha@gmail.com" },
+  { id: "23FE1A05K9", name: "SHAIK AYESHA FARHEEN", email: "ayeshu49555@gmail.com" },
+  { id: "23FE1A0586", name: "KAMINENI NAGA HARINI", email: "kamineninagaharini2006@gmail.com" },
+  { id: "23FE1A0482", name: "MADAMANCHI VIVEK", email: "madamanchivivek16@gmail.com" },
+  { id: "23FE1A4463", name: "YASAM GEETHIKA", email: "geethikayasam2005@gmail.com" },
+  { id: "23FE1A05A1", name: "KONDRU NAGESWARI", email: "kondrunageswari24@gmail.com" },
+  { id: "24FE5A0513", name: "MENDU NAGA BHARGAVI", email: "nagabhargavimendunagabhargavi@gmail.com" },
+  { id: "23FE1A6104", name: "BANDARU JAYA SAI SHANMUKH", email: "shanmukhbandaru.b@gmail.com" },
+  { id: "23FE1A4458", name: "VELLANKI NAGA REVANTH", email: "vellankinagarevanth@gmail.com" },
+  { id: "23FE1A4212", name: "CHINTHALACHERUVU VENKATA NARENDRA", email: "narendrareddych181@gmail.com" },
+  { id: "23FE1A4219", name: "GALLA LAKSHMI PAVITHRA", email: "gallasaipavitra@gmail.com" },
+  { id: "23FE1A4229", name: "KASUKURTHI SNEHA MADHURI", email: "snehhaa17@gmail.com" },
+  { id: "23FE1A0573", name: "ISSARAPU TARUNA SRAVANTHI", email: "issarapusravanthi@gmail.com" },
+  { id: "23FE1A0493", name: "MEDIKONDA MANASA RANI", email: "manasamedikonda22@gmail.com" },
+  { id: "23FE1A6161", name: "VEMULURU DEVA RAJ", email: "vemulurudevaraj@gmail.com" },
+  { id: "23FE1A0543", name: "DASARI MANJULA", email: "manjuladasari9286@gmail.com" },
+  { id: "23FE1A1262", name: "V L SATYA SAI SUBRAMANYESWARI", email: "lakshmisatyasai385@gmail.com" },
+  { id: "23FE1A4414", name: "EDIGA ASHOK", email: "ashokashokgoud462@gmail.com" },
+  { id: "24FE5A0518", name: "SHAIK ARIF", email: "as0476220@gmail.com" },
+  { id: "23FE1A4222", name: "GOGINENI SINDHURA DEVI", email: "sindhuradevi7@gmail.com" },
+  { id: "23FE1A4260", name: "VALAPARLA LISA CHRISTINE", email: "lisachristinevalaparla@gmail.com" },
+  { id: "24FE5A0517", name: "PAVULURI MADHAVI LATHA", email: "vyshupavuluri@gmail.com" },
+  { id: "23FE1A1237", name: "PAGADALA ISHWARYA", email: "ishwaryapagadala131@gmail.com" },
+  { id: "23FE1A6130", name: "LAVU NAGA DIVYA", email: "nagadivya0826@gmail.com" },
+  { id: "24FE5A0519", name: "SHAIK JASMIN", email: "jasminshaik9703@gmail.com" },
+  { id: "23FE1A05K0", name: "RUDRAPOGU CRISPY DONY", email: "crispydony0912@gmail.com" },
+  { id: "23FE1A1221", name: "KALIKAYA VARSHINI", email: "kalikayavarshini99@gmail.com" },
+  { id: "23FE1A4411", name: "CHITTIBOYINA SRI HARI PRANAV", email: "chittiboyinasriharipranav@gmail.com" },
+  { id: "23FE1A4420", name: "JONNADULA GOWTHAM KUMAR", email: "gowthamkumarjonnadula@gmail.com" },
+  { id: "23FE1A0479", name: "KOVVURU DAMAYANTHI", email: "damayanthiyanthi811@gmail.com" },
+  { id: "23FE1A4410", name: "CHALLAGUNDLA MADHURI", email: "madhurichallagundla7@gmail.com" },
+  { id: "23FE1A0534", name: "CHINNABATHINI RAVI TEJA", email: "ravitejachinnabathini7@gmail.com" },
+  { id: "23FE1A0553", name: "ELURI VENKATESH", email: "nagarajueluri038@gmail.com" },
+  { id: "23FE1A05C0", name: "MALLEPULA NAMRATHA", email: "mnamratha046@gmail.com" },
+  { id: "23FE1A05I9", name: "PUVVADI KEERTHI", email: "keerthipuvvadi12@gmail.com" },
+  { id: "23FE1A05E2", name: "MUNAGA BHAVANA", email: "munagabhavana.04@gmail.com" },
+  { id: "23FE1A05N9", name: "VENNA SUMITHRA DEVI", email: "sumithradevivenna7@gmail.com" },
+  { id: "23FE1A05G8", name: "PARVATHAREDDY POOJA", email: "appr.1320@gmail.com" },
+  { id: "23FE1A05I2", name: "PONNURU JAYASRI", email: "jayasriponnur@gmail.com" },
+  { id: "23FE1A05C8", name: "MIDDEY LEELA SAI", email: "middeysai25@gmail.com" },
+  { id: "23FE1A05D5", name: "MOHAMMAD AYESHA", email: "mdayesha7863@gmail.com" },
+  { id: "23FE1A0594", name: "KESIREDDY VENKATA GREESHMA REDDY", email: "kesireddygreeshma@gmail.com" },
+  { id: "23FE1A05O5", name: "YARRAM SRI KEERTHI", email: "srikeerthiyarram@gmail.com" },
+  { id: "23FE1A05N8", name: "VASIREDDY VIHARIKA", email: "viharikavasireddy07@gmail.com" },
+  { id: "23FE1A05O8", name: "SATHULURI V S S KEERTHANA SARVANI", email: "sarvanisathuluri799@gmail.com" },
+  { id: "24FE5A0521", name: "SIVARATRI VENKATARAMANA", email: "venkataramanasivaratri322@gmail.com" },
+  { id: "23FE1A04H8", name: "VALLAMKONDA DHANYARA SRI LALITHA", email: "lalithasivavallamkonda@gmail.com" },
+  { id: "23FE1A4351", name: "SHAIK SHAMEEM AKTHER", email: "shameem.shaik0501@gmail.com" },
+  { id: "23FE1A4324", name: "KODURU JAGADEESH BABU", email: "kodurujagadeeshbabu77@gmail.com" },
+  { id: "23FE1A4350", name: "SHAIK.NAZEER", email: "sknazeer9398850146@gmail.com" },
+  { id: "23FE1A04F2", name: "SINGAMSETTY KOWSHIK", email: "kowshik2866@gmail.com" },
+  { id: "23FE1A05B4", name: "MADINI MNV SAI SIDDHARTHA", email: "siddharthmadini2811@gmail.com" },
+  { id: "23FE1A0556", name: "GADIBIDI ALEKHYA", email: "gadibidialekhya119@gmail.com" },
+  { id: "23FE1A0533", name: "CHILAKA PRAVEEN KUMAR", email: "chilakapraveen2005@gmail.com" },
+  { id: "23FE1A0424", name: "BYREDDY SUDHEER REDDY", email: "reddy19sudheer@gmail.com" },
+  { id: "24FE5A0523", name: "UPPU PRAVALLIKA", email: "pravallikauppu1128@gmail.com" },
+  { id: "23FE1A04E6", name: "SHAIK MEHATHAZ", email: "mehatahazshaik@gmail.com" },
+  { id: "23FE1A4216", name: "EEDE NIKHILA", email: "nikhilaeede@gmail.com" },
+  { id: "23FE1A1243", name: "Potla Vasavi Durga", email: "vasavidurgapotla@gmail.com" },
+  { id: "23FE1A1240", name: "Podili Sri Sai Latha", email: "podhilisrisailatha@gmail.com" },
+  { id: "23FE1A04G7", name: "TURLAPATI TORAJA ANAGHA SRINIDHI", email: "anaghasrinidhiturlapati@gmail.com" },
+  { id: "23FE1A4328", name: "KUNCHALA SRINADH", email: "srinadkunchala@gmail.com" },
+  { id: "23FE1A4257", name: "SIVANI MENDU", email: "sivaani237@gmail.com" },
+  { id: "23FE1A4255", name: "SIMHADRI VEERA VENKATA LAKSHMI GOWRI", email: "gowrisimhadri10@gmail.com" },
+  { id: "23FE1A4220", name: "GANTA VENNELA", email: "vennelaganta356@gmail.com" },
+  { id: "23FE1A4353", name: "SYED SAJIDA SULTHANA", email: "sajidasyed83828@gmail.com" },
+   { id: "80", name: "Veerababu", email: "veerababu@gmail.com" }
+];
+
+
+// ─── CODING SHEET DATA ───────────────────────────────────────────────────────
 const topics = [
   {
     id: "arrays",
@@ -418,7 +574,7 @@ function AdminDashboard({ onLogout, students, setStudents }) {
   );
 }
 
-// ─── STUDENT VIEW (ORIGINAL COMPONENT WRAPPER) ──────────────────────────────
+// ─── STUDENT VIEW ───────────────────────────────────────────────────────────
 function StudentSheet({ student, onLogout }) {
   const [mode, setMode] = useState("digital");
   const [filter, setFilter] = useState("All");
@@ -444,11 +600,7 @@ function StudentSheet({ student, onLogout }) {
     .map((t) => ({
       ...t,
       problems: t.problems.filter((p) => {
-        const tagOk =
-          filter === "All" ||
-          p.tag === filter ||
-          (filter === "PDF Only" && p.source === "PDF") ||
-          (filter === "Added" && p.source === "Added");
+        const tagOk = filter === "All" || p.tag === filter || (filter === "PDF Only" && p.source === "PDF") || (filter === "Added" && p.source === "Added");
         const diffOk = diffFilter === "All" || p.difficulty === diffFilter;
         return tagOk && diffOk;
       }),
@@ -466,7 +618,7 @@ function StudentSheet({ student, onLogout }) {
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "#0F172A", minHeight: "100vh", paddingBottom: 48 }}>
       
-      {/* NEW: Student Welcome & Logout Bar */}
+      {/* Student Welcome & Logout Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', background: '#020617', borderBottom: '1px solid #1E293B' }}>
         <div style={{ color: '#94A3B8', fontSize: '14px' }}>
           Welcome, <strong style={{ color: 'white' }}>{student.name}</strong> ({student.id})
@@ -660,14 +812,19 @@ function StudentSheet({ student, onLogout }) {
 
 // ─── MAIN APP ROUTER ────────────────────────────────────────────────────────
 export default function App() {
-  const [user, setUser] = useState(null); // null, {role: 'admin'}, or {role: 'student', id, name, email}
+  const [user, setUser] = useState(null); 
   
-  // Load students from LocalStorage for persistence across reloads on Vercel
+  // Load students from LocalStorage, but if empty, initialize with INITIAL_STUDENTS
   const [students, setStudents] = useState(() => {
     const saved = localStorage.getItem('tcs_students');
-    return saved ? JSON.parse(saved) : [];
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    // If opening for the very first time on a new device, load the 150 students directly
+    return INITIAL_STUDENTS; 
   });
 
+  // Save changes (from Admin Dashboard) back to local storage
   useEffect(() => {
     localStorage.setItem('tcs_students', JSON.stringify(students));
   }, [students]);
