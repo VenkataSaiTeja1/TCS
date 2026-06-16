@@ -1204,7 +1204,7 @@ function Login({ onLogin, students }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0F172A', fontFamily: "'Inter', sans-serif" }}>
       <form onSubmit={handleLogin} style={{ background: '#1E293B', padding: '40px', borderRadius: '12px', width: '320px', border: '1px solid #334155' }}>
-        <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>TCS Portal Login</h2>
+        <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>VLITS Students Login</h2>
         {error && <div style={{ color: '#EF4444', fontSize: '12px', marginBottom: '16px', textAlign: 'center' }}>{error}</div>}
         
         <div style={{ marginBottom: '16px' }}>
