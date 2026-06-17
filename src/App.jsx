@@ -246,7 +246,7 @@ const INITIAL_STUDENTS = [
   { id: "23FE1A04A9", name: "PALAPARTHI PRAVEEN", email: "praveenpalaparthi81@gamil.com" },
   { id: "23FE1A04B0", name: "PALAPARTHI SHARMILA", email: "palaparthisharmila97@gmail.com" },
   { id: "23FE1A04B1", name: "PANE SATHVIKA", email: "sathvikapane1919@gmail.com" },
-  { id: "23FE1A04B2", name: "PANUGANTI BAJI", email: "panugantibaji605@gmail.com" },
+  { id: "23FE1A04B2", name: "PANUGANTI BAJI", email: "panugantibaji605" },
   { id: "23FE1A04B3", name: "PASAM ANIL KUMAR", email: "pasamanilkumar01@gmail.com" },
   { id: "23FE1A04B4", name: "PASAM NAVYA", email: "pasamnavyareddy@gmail.com" },
   { id: "23FE1A04B5", name: "PASUPULA UDAY KIRAN", email: "udaykiranpasupula8978@gmail.com" },
