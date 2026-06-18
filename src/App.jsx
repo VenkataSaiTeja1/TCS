@@ -1185,30 +1185,46 @@ function Login({ onLogin, students }) {
   const handleLogin = (e) => {
     e.preventDefault();
     
+    // --- DEBUGGING LOGS (You can see these by Right-Clicking -> Inspect -> Console) ---
+    console.log("Total students loaded in app:", students?.length || 0);
+    console.log("Attempting login with -> ID:", username, "| Email:", password);
+    // --------------------------------------------------------------------------------
+
     // Check Admin
-    if (username === "VLITSAdmin" && password === "VLITSAdmin@01") {
+    if (username.trim() === "VLITSAdmin" && password.trim() === "VLITSAdmin@01") {
       onLogin({ role: "admin" });
       return;
     }
 
-    // Check Student (Username: studentId, Password: email)
-    const student = students.find((s) => s.id === username && s.email === password);
+    // Safely Check Student (Prevents crashes if a record is missing an ID or Email)
+    const student = (students || []).find((s) => {
+      if (!s || !s.id || !s.email) return false; 
+      
+      // Forces everything to lowercase strings and removes extra spaces
+      const matchId = s.id.toString().trim().toLowerCase() === username.trim().toLowerCase();
+      const matchEmail = s.email.toString().trim().toLowerCase() === password.trim().toLowerCase();
+      
+      return matchId && matchEmail;
+    });
+
     if (student) {
+      console.log("✅ Login successful for:", student.name);
       onLogin({ role: "student", ...student });
       return;
     }
 
-    setError("Invalid credentials. Please try again.");
+    console.log("❌ Login failed. No exact match found in the students list.");
+    setError("Invalid credentials. Please check your ID and Email.");
   };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0F172A', fontFamily: "'Inter', sans-serif" }}>
       <form onSubmit={handleLogin} style={{ background: '#1E293B', padding: '40px', borderRadius: '12px', width: '320px', border: '1px solid #334155' }}>
-        <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>VLITS Students Login</h2>
+        <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>VLITS Student Login</h2>
         {error && <div style={{ color: '#EF4444', fontSize: '12px', marginBottom: '16px', textAlign: 'center' }}>{error}</div>}
         
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ color: '#94A3B8', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Username / Student ID</label>
+          <label style={{ color: '#94A3B8', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Student ID</label>
           <input
             type="text"
             value={username}
@@ -1219,7 +1235,7 @@ function Login({ onLogin, students }) {
         </div>
         
         <div style={{ marginBottom: '24px' }}>
-          <label style={{ color: '#94A3B8', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Password / Email</label>
+          <label style={{ color: '#94A3B8', fontSize: '12px', display: 'block', marginBottom: '8px' }}>Email Address</label>
           <input
             type="password"
             value={password}
@@ -1559,17 +1575,41 @@ function StudentSheet({ student, onLogout }) {
 export default function App() {
   const [user, setUser] = useState(null); 
   
-  // Load students from LocalStorage, but if empty, initialize with INITIAL_STUDENTS
+  // Highly resilient initialization logic
   const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem('tcs_students');
-    if (saved) {
-      return JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem('tcs_students');
+      
+      if (saved) {
+        const parsedSavedStudents = JSON.parse(saved);
+        
+        // Ensure the saved data is actually an array to prevent crashes
+        if (Array.isArray(parsedSavedStudents)) {
+          // Always start with the fresh 150 students from the code
+          const combinedList = [...INITIAL_STUDENTS];
+          
+          // Merge in any extra students added via Admin Dashboard
+          parsedSavedStudents.forEach(savedStudent => {
+            if (savedStudent && savedStudent.id) {
+              const exists = combinedList.find(s => s.id === savedStudent.id);
+              if (!exists) {
+                combinedList.push(savedStudent);
+              }
+            }
+          });
+          
+          return combinedList;
+        }
+      }
+    } catch (error) {
+      console.error("Local storage error, defaulting to initial list:", error);
     }
-    // If opening for the very first time on a new device, load the 150 students directly
+    
+    // Fallback: If anything is broken in local storage, force the 150 students
     return INITIAL_STUDENTS; 
   });
 
-  // Save changes (from Admin Dashboard) back to local storage
+  // Save changes back to local storage
   useEffect(() => {
     localStorage.setItem('tcs_students', JSON.stringify(students));
   }, [students]);
